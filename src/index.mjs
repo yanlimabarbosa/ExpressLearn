@@ -18,7 +18,19 @@ app.get("/", (request, response) => {
 })
 
 app.get("/api/users", (request, response) => {
-  response.send(mockUsers)
+  const {
+    query: { filter, value },
+  } = request
+
+  console.log(filter, value)
+
+  if (filter && value) {
+    return response.send(
+      mockUsers.filter((user) => user[filter].includes(value))
+    )
+  }
+
+  return response.send(mockUsers)
 })
 
 app.get("/api/users/:id", (request, response) => {
@@ -41,6 +53,4 @@ app.get("/api/products", (request, response) => {
   response.send([{ id: 123, name: "chichen breast", price: 12.99 }])
 })
 
-app.listen(PORT, () => {
-  console.log(`Running on Port ${PORT}`)
-})
+app.listen(PORT)
