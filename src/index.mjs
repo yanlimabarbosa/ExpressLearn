@@ -1,5 +1,5 @@
 import express from "express"
-import dotenv from "dotenv"
+import dotenv, { parse } from "dotenv"
 
 dotenv.config()
 
@@ -55,6 +55,27 @@ app.get("/api/users/:id", (request, response) => {
   }
 
   return response.json(user)
+})
+
+app.put("/api/users/:id", (request, response) => {
+  const {
+    body,
+    params: { id },
+  } = request
+
+  const parsedId = parseInt(id)
+  if (isNaN(parsedId)) return response.sendStatus(400)
+
+  const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId)
+
+  if (findUserIndex === -1) return response.sendStatus(400)
+
+  mockUsers[findUserIndex] = {
+    id: parsedId,
+    ...body,
+  }
+
+  return response.sendStatus(200)
 })
 
 app.get("/api/products", (request, response) => {
