@@ -19,14 +19,12 @@ app.get("/", (request, response) => {
 
 app.get("/api/users", (request, response) => {
   const {
-    query: { filter, value },
+    query: { name },
   } = request
 
-  console.log(filter, value)
-
-  if (filter && value) {
+  if (name) {
     return response.send(
-      mockUsers.filter((user) => user[filter].includes(value))
+      mockUsers.filter((user) => user.username.includes(name))
     )
   }
 
