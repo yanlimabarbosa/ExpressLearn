@@ -9,6 +9,8 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 3000
 
+app.listen(PORT)
+
 const mockUsers = [
   { id: 1, username: "anson", displayName: "Anson" },
   { id: 2, username: "john", displayName: "John" },
@@ -97,4 +99,16 @@ app.get("/api/products", (request, response) => {
   response.send([{ id: 123, name: "chichen breast", price: 12.99 }])
 })
 
-app.listen(PORT)
+app.delete("/api/users/:id", (request, response) => {
+  const {
+    params: { id },
+  } = request
+
+  const parsedId = parseInt(id)
+
+  if (isNaN(parsedId)) return response.sendStatus(200)
+  const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId)
+  if (findUserIndex === -1) return response.sendStatus(404)
+  mockUsers.splice(findUserIndex, 1)
+  return response.sendStatus(200)
+})
